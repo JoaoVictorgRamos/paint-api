@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="errorText" class="flickable"></div>
+    <pre
+      id="errorCodeDigits"
+      class="zeroLineHeight zeroOpacity spacedLetters flickable"
+    ></pre>
+    <div id="info">&lsaquo;--NEW CODE</div>
+    <style>
+      ::selection {
+        background: rgba(46, 241, 66, 0.185);
+      }
+      body {
+        background-color: #080808;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: rgba(46, 241, 65, 1);
+        font-family: "AndaleMono", monospace;
+        text-transform: uppercase;
+      }
+
+      #errorCodeDigits,
+      #errorText {
+        display: block;
+        font-size: 1.4em;
+        white-space: pre-wrap;
+        text-shadow: 0 0 2px rgba(46, 241, 65, 10.75);
+        line-height: 1.1;
+        letter-spacing: -0.1rem;
+        margin-top: 4rem;
+      }
+      #errorCodeDigits {
+        order: 0;
+        transition: all 0.3s ease-out;
+      }
+      #errorText {
+        order: 1;
+        line-height: 0.75;
+        text-align: center;
+      }
+
+      #info {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        padding: 1rem;
+        cursor: pointer;
+      }
+
+      .zeroLineHeight {
+        line-height: 0 !important;
+      }
+      .zeroOpacity {
+        opacity: 0 !important;
+      }
+      .spacedLetters {
+        letter-spacing: 2rem !important;
+      }
+
+      .cursor:before {
+        content: "█";
+      }
+
+      .animateFlicker {
+        animation: flickerAnimation 1s infinite;
+      }
+
+      @keyframes flickerAnimation {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+    <script>
+      var self = this;
+      self.window = window;
+
+      var errorCodeEl = document.querySelector("#errorCodeDigits");
+      var errorMessage = document.querySelector("#errorText");
+      var homeButton = document.querySelector("#info");
+
+      homeButton.addEventListener(
+        "click",
+        function (event) {
+          self.window.location.reload(true);
+          event.preventDefault();
+        },
+        false
+      );
+
+      function handleCode(code) {
+        self.message = "ERROR: " + codesArray[code];
+        showErrorCodeDigits(code);
+        showMessage(self.message, function () {
+          flicker();
+        });
+      }
+
+      function showErrorCodeDigits(errorCode) {
+        var digits = ("" + errorCode).split("");
+        var rows = ["", "", "", "", "", "", ""];
+
+        errorCodeEl.innerHTML = "";
+
+        for (var i = 0; i < digits.length; i++) {
+          var digitToAdd = +digits[i];
+          var initialPosition =
+            digitToAdd > 4 ? 7 * 5 + (digitToAdd - 5) : digitToAdd;
+          for (var l = 0; l < 7; l++) {
+            var replacement = dString[initialPosition + 5 * l];
+            rows[l] += replacement.replace(/[$]/g, "\\");
+          }
+          errorCodeEl.textContent = rows.join("\n");
+          window.setTimeout(function () {
+            errorCodeEl.classList.remove("spacedLetters");
+            errorCodeEl.classList.remove("zeroLineHeight");
+            errorCodeEl.classList.remove("zeroOpacity");
+          }, 1000);
+        }
+      }
+
+      function showMessage(message, onCompletion) {
+        var messageString = message;
+        for (var i = 0; i < messageString.length; i++) {
+          self.window.setTimeout(() => {
+            var index = errorMessage.innerText.length + 1;
+            errorMessage.innerHTML = `${messageString.substr(
+              0,
+              index
+            )}<span class="cursor animateFlicker"></span>`;
+            if (index == messageString.length) {
+              onCompletion();
+            }
+          }, 1300 + 50 * i);
+        }
+      }
+
+      function toggle(toggleOn) {
+        errorMessage.style.opacity = errorCode.style.opacity = toggleOn
+          ? "1"
+          : "0";
+      }
+
+      function flicker() {
+        if (self.flickerCount < 50) {
+          toggle(Math.random() > 0.8),
+            setTimeout(flicker, 100 * Math.random() * 0.2);
+          self.flickerCount++;
+          return;
+        } else {
+          self.flickerCount = 0;
+          toggle(1);
+          setTimeout(flicker, 3000 + Math.random() * 3000);
+        }
+      }
+
+      const dString = [
+        " ________     ",
+        "   _____     ",
+        "  _______     ",
+        " ________     ",
+        " ___  ___     ",
+        "|$   __  $    ",
+        "  / __  $    ",
+        " /  ___  $    ",
+        "|$_____  $    ",
+        "|$  $|$  $    ",
+        "$ $  $|$  $   ",
+        " |$/ |$  $   ",
+        "/__/|_/  /|   ",
+        "$|____|$ /_   ",
+        "$ $  $_$  $   ",
+        " $ $  $$$  $  ",
+        "  $|/$ $  $  ",
+        "|__|//  / /   ",
+        "      $|$  $  ",
+        " $ $_____  $  ",
+        "  $ $  $$$  $ ",
+        "      $ $  $ ",
+        "    /  /_/__  ",
+        "     __$_$  $ ",
+        "  $|____|$  $ ",
+        "   $ $_______$",
+        "       $ $__$",
+        "   |$________$",
+        "    |$_______$",
+        "        $ $__$",
+        "    $|_______|",
+        "        $|__|",
+        "    $|_______|",
+        "    $|_______|",
+        "         $|__|",
+        " ________     ",
+        " ________     ",
+        "  ________    ",
+        " ________     ",
+        " ________     ",
+        "|$   ____$    ",
+        "|$   ____$    ",
+        " |$_____  $   ",
+        "|$   __  $    ",
+        "|$  ___  $    ",
+        "$ $  $___|_   ",
+        "$ $  $___|    ",
+        "  $|___/  /|  ",
+        "$ $  $|$  $   ",
+        "$ $____   $   ",
+        " $ $_____  $  ",
+        " $ $  $_____  ",
+        "      /  / /  ",
+        " $ $   __  $  ",
+        " $|____|$  $  ",
+        "  $|____|$  $ ",
+        "  $ $  ___  $ ",
+        "     /  / /   ",
+        "  $ $  $|$  $ ",
+        "     __$_$  $ ",
+        "   |$________$",
+        "   $ $_______$",
+        "    /__/ /    ",
+        "   $ $_______$",
+        "    |$_______$",
+        "   $|________|",
+        "    $|_______|",
+        "    |__|/     ",
+        "    $|_______|",
+        "    $|_______|",
+      ];
+
+      var codesArray = {
+        200: "OK",
+        201: "Created",
+        202: "Accepted",
+        203: "Non-Authoritative Information",
+        204: "No Content",
+        205: "Reset Content",
+        206: "Partial Content",
+        207: "Multi-Status",
+        208: "Already Reported",
+        226: "IM Used",
+        300: "Multiple Choices",
+        301: "Moved Permanently",
+        302: "Found",
+        303: "See Other",
+        304: "Not Modified",
+        305: "Use Proxy",
+        306: "Switch Proxy",
+        307: "Temporary Redirect",
+        308: "Permanent Redirect",
+        400: "Bad Request",
+        401: "Unauthorized",
+        402: "Payment Required",
+        403: "Forbidden",
+        404: "Not Found",
+        405: "Method Not Allowed",
+        406: "Not Acceptable",
+        407: "Proxy Authentication Required",
+        408: "Request Timeout",
+        409: "Conflict",
+        410: "Gone",
+        411: "Length Required",
+        412: "Precondition Failed",
+        413: "Payload Too Large",
+        414: "URI Too Long",
+        415: "Unsupported Media Type",
+        416: "Range Not Satisfiable",
+        417: "Expectation Failed",
+        418: "I am a teapot",
+        421: "Misdirected Request",
+        422: "Unprocessable Entity",
+        423: "Locked",
+        424: "Failed Dependency",
+        426: "Upgrade Required",
+        428: "Precondition Required",
+        429: "Too Many Requests",
+        431: "Request Header Fields Too Large",
+        451: "Unavailable For Legal Reasons",
+        500: "Internal Server Error",
+        501: "Not Implemented",
+        502: "Bad Gateway",
+        503: "Service Unavailable",
+        504: "Gateway Timeout",
+        505: "HTTP Version Not Supported",
+        506: "Variant Also Negotiates",
+        507: "Insufficient Storage",
+        508: "Loop Detected",
+        510: "Not Extended",
+        511: "Network Authentication Required",
+      };
+
+      handleCode(404);
+      // handleCode(Object.keys(codesArray)[Math.floor(Math.random() * (58 - 0 + 1)) + 0]);
+    </script>
+  </body>
+</html>
