@@ -1,4 +1,4 @@
-export interface modelUser {
+export interface UserModel {
   id?: number;
   name: string;
   email: string;
@@ -12,6 +12,13 @@ export interface User {
   name: string;
   email: string;
   password: string;
+  token: Token;
+}
+
+export interface userLogin {
+  id: number;
+  name: string;
+  email: string;
   token: Token;
 }
 

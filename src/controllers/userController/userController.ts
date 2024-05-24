@@ -21,8 +21,6 @@ export const index = async (
   try {
     res.status(201).json({ message: "GET OK" });
   } catch (error) {
-    // if(error instanceOf Error){
     res.status(400).json({ error: error });
-    // }
   }
 };

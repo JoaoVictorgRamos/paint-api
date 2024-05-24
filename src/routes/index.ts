@@ -8,7 +8,11 @@ const publicDirectory = path.join(__dirname, "../../public");
 // middleware
 import { authMiddleware } from "../middleware/auth";
 // controllers
-import { userController } from "../controllers";
+import {
+  userController,
+  loginController,
+  draftsController,
+} from "../controllers";
 
 const router: Router = Router();
 
@@ -20,8 +24,13 @@ router.get("/", (req: Request, res: Response) => {
   }
 });
 
-router.get("/register", authMiddleware, userController.index);
 router.post("/register", userController.store);
+
+router.post("/login", loginController.store);
+
+router.post("/draft", authMiddleware, draftsController.store);
+router.get("/draft", authMiddleware, draftsController.index);
+router.get("/draft-all", authMiddleware, draftsController.indexAll);
 
 router.use((req: Request, res: Response) => {
   res.sendFile("404matrix.html", { root: publicDirectory });

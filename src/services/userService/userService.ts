@@ -8,9 +8,11 @@ import { generateToken } from "../../utils/jwt";
 import { ZodError } from "zod";
 import { userSchemaValidate } from "../../utils/validateSchemas";
 // models
-import { modelUser, User, Token } from "../../models/userModel/userModel";
+import { UserModel } from "../../models/index";
 
-export const storeUser = async (params: modelUser): Promise<User | Error> => {
+export const storeUser = async (
+  params: UserModel.UserModel
+): Promise<UserModel.User | Error> => {
   try {
     const userSchemaValidated = await userSchemaValidate(params);
     if (userSchemaValidated instanceof ZodError) {
