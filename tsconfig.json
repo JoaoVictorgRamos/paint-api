@@ -108,7 +108,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "knexfile.ts"
+    "src/knexfile.ts"
   ],
   "exclude": ["./jest.config.ts", "./node_modules", "./tests", "./build"]
 }
