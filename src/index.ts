@@ -10,10 +10,10 @@ import router from "./routes/index";
 // app
 const app: Application = express();
 app.use(express.json());
-app.use(router);
 app.use(cors({
     origin: '*'
   }));
+app.use(router);
 
 const PORT = process.env.PORT || 3000;
 
