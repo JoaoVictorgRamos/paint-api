@@ -63,13 +63,28 @@ export const indexDrafts = async (
 
 export const indexAllDrafts = async (
   params: any
-): Promise<DraftsModel.DraftsModel[] | Error> => {
+): Promise<
+  | {
+      total: number;
+      per_page: number;
+      current_page: number;
+      data: DraftsModel.DraftsModel[];
+    }
+  | Error
+> => {
   try {
-    params = 1;
-    // paginate
-    const drafts: DraftsModel.DraftsModel[] = await db("drafts").select();
+    const { page = 1, per_page = 10 } = params;
 
-    return drafts;
+    const { data, pagination } = await db("drafts")
+      .select()
+      .paginate({ perPage: per_page, currentPage: page });
+
+    return {
+      total: pagination.total,
+      per_page: pagination.perPage,
+      current_page: pagination.currentPage,
+      data: data,
+    };
   } catch (error) {
     return error as Error;
   }

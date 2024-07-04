@@ -16,7 +16,10 @@ export const authMiddleware = (
   const token = authorizationHeader.split(" ")[1]; // Bearer token
 
   if (!token) {
-    res.status(401).json({ message: "Token não fornecido" });
+    res.status(401).json({
+      message:
+        "Token no formato incorreto. Por favor, forneça um token válido.",
+    });
     return;
   }
 

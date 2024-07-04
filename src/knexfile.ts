@@ -1,4 +1,5 @@
 import { Knex } from "knex";
+import { attachPaginate } from "knex-paginate";
 import dotenv from "dotenv";
 
 const env = process.env.NODE_ENV || "development";
@@ -10,6 +11,7 @@ dotenv.config({ path: envFile });
 // console.log("MYSQLPASSWORD:", process.env.MYSQLPASSWORD);
 // console.log("MYSQLDATABASE:", process.env.MYSQLDATABASE);
 // console.log("MYSQLPORT:", process.env.MYSQLPORT);
+attachPaginate();
 
 const config: { [key: string]: Knex.Config } = {
   development: {
