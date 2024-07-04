@@ -1,7 +1,12 @@
 // schemas
-import { userSchemas, loginSchema, draftsSchema } from "../schemas";
+import {
+  userSchemas,
+  loginSchema,
+  draftsSchema,
+  commentsSchema,
+} from "../schemas";
 // models
-import { UserModel, DraftsModel } from "../models/index";
+import { UserModel, DraftsModel, CommentsModel } from "../models/index";
 
 export const userSchemaValidate = async (
   params: UserModel.UserModel
@@ -38,6 +43,26 @@ export const draftIndexSchemaValidate = async (
 ): Promise<unknown | Error> => {
   try {
     draftsSchema.draftIndexSchema.parse(params);
+  } catch (error) {
+    return error as Error;
+  }
+};
+
+export const commentsStoreSchemaValidate = async (
+  params: CommentsModel.CommentsModel
+): Promise<unknown | Error> => {
+  try {
+    commentsSchema.commentsStoreSchema.parse(params);
+  } catch (error) {
+    return error as Error;
+  }
+};
+
+export const commentsIndexSchemaValidate = async (
+  params: CommentsModel.CommentsModel
+): Promise<unknown | Error> => {
+  try {
+    commentsSchema.commentsIndexSchema.parse(params);
   } catch (error) {
     return error as Error;
   }

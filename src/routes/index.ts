@@ -12,6 +12,7 @@ import {
   userController,
   loginController,
   draftsController,
+  commentsController,
 } from "../controllers";
 
 const router: Router = Router();
@@ -31,6 +32,9 @@ router.post("/login", loginController.store);
 router.post("/draft", authMiddleware, draftsController.store);
 router.get("/draft", authMiddleware, draftsController.index);
 router.get("/draft-all", authMiddleware, draftsController.indexAll);
+
+router.post("/comments", authMiddleware, commentsController.store);
+router.get("/comments", authMiddleware, commentsController.index);
 
 router.use((req: Request, res: Response) => {
   res.sendFile("404matrix.html", { root: publicDirectory });

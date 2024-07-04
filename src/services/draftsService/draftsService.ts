@@ -7,7 +7,7 @@ import {
   draftIndexSchemaValidate,
 } from "../../utils/validateSchemas";
 // models
-import { DraftsModel } from "../../models/index";
+import { DraftsModel, PaginationModel } from "../../models/index";
 
 export const storeDrafts = async (
   params: DraftsModel.DraftsModel
@@ -62,22 +62,17 @@ export const indexDrafts = async (
 };
 
 export const indexAllDrafts = async (
-  params: any
-): Promise<
-  | {
-      total: number;
-      per_page: number;
-      current_page: number;
-      data: DraftsModel.DraftsModel[];
-    }
-  | Error
-> => {
+  params: DraftsModel.IndexAllDraftsParams
+): Promise<DraftsModel.IndexAllDraftsResponse | Error> => {
   try {
     const { page = 1, per_page = 10 } = params;
 
-    const { data, pagination } = await db("drafts")
+    const result = await db("drafts")
       .select()
       .paginate({ perPage: per_page, currentPage: page });
+
+    const data = result.data as DraftsModel.DraftsModel[];
+    const pagination = result.pagination as PaginationModel.PaginationModel;
 
     return {
       total: pagination.total,
