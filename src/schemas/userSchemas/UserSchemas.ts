@@ -4,9 +4,13 @@ export const registerSchema = z.object({
   name: z
     .string()
     .min(3, { message: "O nome deve ter no mínimo 3 caracteres" })
-    .refine((name) => /^[A-Z][a-z]*$/.test(name), {
-      message: "A primeira letra do nome deve ser maiúscula",
-    }),
+    .refine(
+      (name) =>
+        /^[A-ZÀ-ÖØ-Þ][a-zà-öø-ÿ]*(\s[A-ZÀ-ÖØ-Þ][a-zà-öø-ÿ]*)*$/.test(name),
+      {
+        message: "Cada nome e sobrenome deve começar com uma letra maiúscula",
+      }
+    ),
   email: z.string().email("E-mail inválido"),
   password: z
     .string()

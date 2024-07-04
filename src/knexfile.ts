@@ -1,7 +1,9 @@
 import { Knex } from "knex";
 import dotenv from "dotenv";
 
-dotenv.config();
+const env = process.env.NODE_ENV || "development";
+const envFile = env === "development" ? ".env.dev" : ".env";
+dotenv.config({ path: envFile });
 
 // console.log("MYSQLHOST:", process.env.MYSQLHOST);
 // console.log("MYSQLUSER:", process.env.MYSQLUSER);
@@ -20,7 +22,10 @@ const config: { [key: string]: Knex.Config } = {
       port: Number(process.env.MYSQLPORT),
     },
     migrations: {
-      directory: "./src/migrations",
+      directory: "./migrations",
+    },
+    seeds: {
+      directory: "./seeds",
     },
   },
   production: {
@@ -33,10 +38,9 @@ const config: { [key: string]: Knex.Config } = {
       port: Number(process.env.MYSQLPORT),
     },
     migrations: {
-      directory: "./src/migrations",
+      directory: "./migrations",
     },
   },
 };
 
-// console.log("MYSQLHOST:", process.env.MYSQLHOST);
 export default config;

@@ -24,8 +24,8 @@ export const storeDrafts = async (
 
     const draftCount: number = parseInt(draftCountDB[0].count, 10);
 
-    if (draftCount >= 5) {
-      throw new Error("You have reached the 5 draft limit");
+    if (draftCount >= 3) {
+      throw new Error("You have reached the 3 draft limit");
     }
 
     const [id] = await db("drafts").insert(params);

@@ -18,7 +18,7 @@ export async function up(knex: Knex): Promise<void> {
       .references("id")
       .inTable("drafts")
       .onDelete("CASCADE");
-    table.decimal("rating", 2, 2).nullable();
+    table.decimal("rating", 3, 1).nullable();
     table.timestamps(true, true);
   });
 }
