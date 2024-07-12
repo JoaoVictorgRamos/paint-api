@@ -15,10 +15,7 @@ export interface User {
   token: Token;
 }
 
-export interface userLogin {
-  id: number;
-  name: string;
-  email: string;
+export interface userToken {
   token: Token;
 }
 

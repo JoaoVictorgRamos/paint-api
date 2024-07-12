@@ -15,7 +15,12 @@ export const store = async (
     const serviceDrafts = await storeDrafts(req.body);
 
     if (serviceDrafts instanceof Error) {
-      res.status(400).json({ error: serviceDrafts.message });
+      try {
+        const errorMessage = JSON.parse(serviceDrafts.message);
+        res.status(400).json({ error: errorMessage });
+      } catch (e) {
+        res.status(400).json({ error: serviceDrafts.message });
+      }
     } else {
       res.status(200).json(serviceDrafts);
     }
@@ -29,10 +34,15 @@ export const index = async (
   res: Response
 ): Promise<void | Error> => {
   try {
-    const serviceDrafts = await indexDrafts(req.body);
+    const serviceDrafts = await indexDrafts(req.query);
 
     if (serviceDrafts instanceof Error) {
-      res.status(400).json({ error: serviceDrafts.message });
+      try {
+        const errorMessage = JSON.parse(serviceDrafts.message);
+        res.status(400).json({ error: errorMessage });
+      } catch (e) {
+        res.status(400).json({ error: serviceDrafts.message });
+      }
     } else {
       res.status(200).json(serviceDrafts);
     }

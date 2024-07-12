@@ -14,7 +14,12 @@ export const store = async (
     const serviceDrafts = await storeComments(req.body);
 
     if (serviceDrafts instanceof Error) {
-      res.status(400).json({ error: serviceDrafts.message });
+      try {
+        const errorMessage = JSON.parse(serviceDrafts.message);
+        res.status(400).json({ error: errorMessage });
+      } catch (e) {
+        res.status(400).json({ error: serviceDrafts.message });
+      }
     } else {
       res.status(200).json(serviceDrafts);
     }
@@ -28,7 +33,7 @@ export const index = async (
   res: Response
 ): Promise<void | Error> => {
   try {
-    const serviceDrafts = await indexComments(req.body);
+    const serviceDrafts = await indexComments(req);
 
     if (serviceDrafts instanceof Error) {
       res.status(400).json({ error: serviceDrafts.message });

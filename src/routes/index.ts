@@ -29,6 +29,8 @@ router.post("/register", userController.store);
 
 router.post("/login", loginController.store);
 
+router.get("/get-me", authMiddleware, userController.index);
+
 router.post("/draft", authMiddleware, draftsController.store);
 router.get("/draft", authMiddleware, draftsController.index);
 router.get("/draft-all", authMiddleware, draftsController.indexAll);

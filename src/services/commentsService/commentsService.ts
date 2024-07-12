@@ -8,6 +8,8 @@ import {
 } from "../../utils/validateSchemas";
 // models
 import { CommentsModel, PaginationModel } from "../../models/index";
+// params
+import { Request } from "express";
 
 export const storeComments = async (
   params: CommentsModel.CommentsModel
@@ -26,10 +28,14 @@ export const storeComments = async (
 };
 
 export const indexComments = async (
-  params: CommentsModel.CommentsIndexParamsModel
+  params: Request
 ): Promise<CommentsModel.CommentsIndexResponseModel | Error> => {
   try {
-    const { page = 1, per_page = 10, draft_id } = params;
+    const {
+      page = 1,
+      per_page = 10,
+      draft_id,
+    } = params.query as CommentsModel.CommentsIndexParamsModel;
 
     const result = await db("comments").select().where({ draft_id }).paginate({
       perPage: per_page,

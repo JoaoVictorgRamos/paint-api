@@ -7,6 +7,8 @@ import {
 } from "../schemas";
 // models
 import { UserModel, DraftsModel, CommentsModel } from "../models/index";
+// params
+import { ParsedQs } from "qs";
 
 export const userSchemaValidate = async (
   params: UserModel.UserModel
@@ -39,7 +41,7 @@ export const draftStoreSchemaValidate = async (
 };
 
 export const draftIndexSchemaValidate = async (
-  params: DraftsModel.DraftsIndexModel
+  params: ParsedQs
 ): Promise<unknown | Error> => {
   try {
     draftsSchema.draftIndexSchema.parse(params);

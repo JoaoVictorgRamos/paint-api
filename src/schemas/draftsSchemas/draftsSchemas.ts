@@ -14,5 +14,5 @@ export const draftsStoreSchema = z.object({
 });
 
 export const draftIndexSchema = z.object({
-  user_id: z.number().positive().int().nonnegative(),
+  user_id: z.string().regex(/^\d+$/),
 });

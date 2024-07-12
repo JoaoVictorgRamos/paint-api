@@ -10,7 +10,12 @@ export const store = async (
     const serviceLogin = await storeLogin(req.body);
 
     if (serviceLogin instanceof Error) {
-      res.status(400).json({ error: serviceLogin.message });
+      try {
+        const errorMessage = JSON.parse(serviceLogin.message);
+        res.status(400).json({ error: errorMessage });
+      } catch (e) {
+        res.status(400).json({ error: serviceLogin.message });
+      }
     } else {
       res.status(200).json(serviceLogin);
     }

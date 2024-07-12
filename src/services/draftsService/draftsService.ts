@@ -1,5 +1,7 @@
 // db
 import db from "../../db/knex";
+// params
+import { ParsedQs } from "qs";
 // schemas
 import { ZodError } from "zod";
 import {
@@ -25,7 +27,7 @@ export const storeDrafts = async (
     const draftCount: number = parseInt(draftCountDB[0].count, 10);
 
     if (draftCount >= 3) {
-      throw new Error("You have reached the 3 draft limit");
+      throw new Error("Você atingiu o limite de 3 rascunhos!");
     }
 
     const [id] = await db("drafts").insert(params);
@@ -37,23 +39,41 @@ export const storeDrafts = async (
 };
 
 export const indexDrafts = async (
-  params: DraftsModel.DraftsIndexModel
-): Promise<DraftsModel.DraftsModel[] | Error> => {
+  params: ParsedQs
+): Promise<(DraftsModel.DraftsModel & { averageRating: number })[] | Error> => {
   try {
     const draftsSchemaValidated = await draftIndexSchemaValidate(params);
     if (draftsSchemaValidated instanceof ZodError) {
       return draftsSchemaValidated;
     }
+    const user_id = parseInt(params.user_id as string, 10);
+
+    if (isNaN(user_id) || user_id <= 0) {
+      throw new Error("Parâmetro user_id inválido!");
+    }
 
     const userExists = await db("users").where({ id: params.user_id }).first();
 
     if (!userExists) {
-      throw new Error("User ID does not exist");
+      throw new Error("O ID do usuário não existe!");
     }
 
-    const drafts: DraftsModel.DraftsModel[] = await db("drafts")
-      .where({ user_id: params.user_id })
-      .select();
+    const drafts: (DraftsModel.DraftsModel & { averageRating: number })[] =
+      await db("drafts").where({ user_id }).select();
+
+    for (const draft of drafts) {
+      const ratings = await db("comments")
+        .where({ draft_id: draft.id })
+        .pluck("rating");
+
+      const validRatings = ratings.filter((rating) => rating !== null);
+
+      draft.averageRating =
+        validRatings.length > 0
+          ? validRatings.reduce((acc, rating) => acc + parseFloat(rating), 0) /
+            validRatings.length
+          : 0;
+    }
 
     return drafts;
   } catch (error) {
